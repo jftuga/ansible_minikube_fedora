@@ -1,5 +1,5 @@
 # ansible_minikube_fedora
-Install minikube on Fedora 35 using Ansible Playbook
+Install minikube on Fedora 35 using this Ansible playbook
 
 ## Synopsis
 This is an ansible playbook that will install [minikube](https://minikube.sigs.k8s.io/docs/) onto a Fedora system.  It has been tested with Fedora 35 on an AWS EC2 `t3a.small` instance.
@@ -27,3 +27,6 @@ ansible-playbook -i inventory.ini minikube.yml
 ## Post install
 * It is necessary to re-login as the `ansible_user` because this user has been added to the `docker` security group
 * Run `minikube status` to check the current operation
+
+## See also
+* [Install packages onto Fedora system via Ansible playbook](https://github.com/jftuga/ansible_fedora_post_install)
