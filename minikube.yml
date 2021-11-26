@@ -1,0 +1,73 @@
+---
+- name: Install docker and minikube
+  hosts: hosts
+  tasks:
+  - name: upload install_docker.sh
+    when:
+      - ansible_facts["docker0"] is not defined
+    become: true
+    copy:
+      src: install_docker.sh
+      dest: /root/
+      owner: root
+      group: root
+      mode: 0700
+  - name: run install_docker.sh
+    become: true
+    shell:
+      cmd: /root/install_docker.sh > /root/install_docker.log 2>&1
+      chdir: /root
+      creates: /root/install_docker.log
+
+  - name: docker service is started
+    service:
+      name: docker
+      state: started
+
+  - name: upload install_minikube.sh
+    become: true
+    copy:
+      src: install_minikube.sh
+      dest: /root/
+      owner: root
+      group: root
+      mode: 0700
+
+  - name: run install_minikube.sh
+    become: true
+    shell:
+      cmd: /root/install_minikube.sh > /root/install_minikube.log 2>&1
+      chdir: /root
+      creates: /root/install_minikube.log
+
+  - name: minikube binary exists
+    stat:
+      path: /usr/local/bin/minikube
+    register: bin_minikube
+
+  - name: kubectl binary exists
+    stat:
+      path: /usr/local/bin/kubectl
+    register: bin_kubectl
+
+  - name: upload start_minikube.sh
+    when:
+      - bin_minikube.stat.exists
+      - bin_kubectl.stat.exists
+    become: false
+    copy:
+      src: start_minikube.sh
+      dest: ${HOME}
+      mode: 0700
+
+  - name: reset ssh connection to allow for neww docker group
+    ansible.builtin.meta:
+      reset_connection
+
+  - name: run start_minikube.sh
+    become: false
+    shell:
+      cmd: ${HOME}/start_minikube.sh > ${HOME}/start_minikube.log 2>&1
+      chdir: 
+      creates: ${HOME}/start_minikube.log
+
