@@ -10,7 +10,7 @@ This is an ansible playbook that will install [minikube](https://minikube.sigs.k
 * * Replace `w.x.y.z` with your own IP address
 * * Set the `ansible_ssh_private_key_file` value
 * * Set the `ansible_user` value
-* * * **Note:** This user should be able to ssh into the remote system without having to be prompted to accept any ssh keys
+* * * **Note:** This user should be able to ssh into the remote system without having to be prompted to accept any ssh keys by using the `ansible_ssh_private_key_file` file mentioned above
 2) `Docker` will be installed via the uploaded `install_docker.sh` script
 * * First, edit `DOCKER_USER` to be the same user listed in the `inventory.ini` file
 * * Check `/root/install_docker.log` for any errors
